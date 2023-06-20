@@ -14,7 +14,7 @@ def cadastro_alunos(alunos)
     3.times do |i|
         print("Digite o nome da matéria: ")
         materia = gets
-        #Verifica se a nota é negativa ou maior que 20
+        #VERFICA SE A NOTA É NEGATIVA OU MAIOR QUE 20
         begin
             print("Digite a nota do estudante: ")
             nota = gets.to_f
@@ -43,26 +43,41 @@ def mostra_relatorio_aluno(alunos)
 
 end
 
+#VERIFICA A SITUAÇÃO DO ALUNO
+def verifica_situacao_aluno (media)
+    if media <= 4.9
+        print("Situação: Reprovado.\n")
+    elsif media >= 5 && media < 6.9
+        print("Situação: Recuperação.\n")
+    else
+        if media >= 6.9
+            print("Situação: Aprovado.\n")
+        else
+            print("Situação: \n")
+        end
+    end
+end
+
 #VERIFICA O ALUNO COM A MAIOR MÉDIA
 def verifica_aluno_maior_media(alunos, alunos_media)
     
     media = 0.0
     media_maior = 0.0
-    aluno_media = {}
 
     alunos.each do |aluno|            
         media = aluno["disciplina"].map{|materia_com_nota| materia_com_nota[:nota]}.sum / aluno["disciplina"].length                        
         puts("Aluno: #{aluno["nome"]}")
         puts("Média: #{media}")             
+        verifica_situacao_aluno(media)        
         print("------------------------------------------------------\n")        
-        
+                
         if media > media_maior
             media_maior = media
-            aluno_media["nome"] = aluno["nome"]
-            aluno_media["media"] = media_maior
-            
             alunos_media.clear()
-            alunos_media.push(aluno_media)
+            alunos_media.push({"nome" => aluno["nome"], "media" => media})
+
+        elsif media == media_maior
+            alunos_media.push({"nome" => aluno["nome"], "media" => media})
         end
     end
 
@@ -98,14 +113,22 @@ def main(alunos, alunos_media)
             system "clear" or system "cls"             
             cadastro_alunos(alunos)
 
-        when "2"
+        when "2"            
             system "clear" or system "cls"
-            mostra_relatorio_aluno(alunos)
+            if alunos.empty?
+                puts("Sem registro...")
+            else
+                mostra_relatorio_aluno(alunos)
+            end
             sleep(5)
 
         when "3"
-            system "clear" or system "cls"         
-            mostra_aluno_maior_media(alunos, alunos_media)            
+            system "clear" or system "cls"   
+            if alunos.empty?
+                puts("Sem registro...")
+            else      
+                mostra_aluno_maior_media(alunos, alunos_media) 
+            end           
             sleep(5)
 
         else
