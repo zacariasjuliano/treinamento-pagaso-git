@@ -1,50 +1,45 @@
 require 'json'
  
 clientes = []
+file_path = 'db/posto.json'
 
-def carregar_dados_json
-    file_path = 'db/posoto.json'
+def carregar_dados_json(file_path)
   
     if File.exist?(file_path)
       file = File.read(file_path)
-      clientes = JSON.parse(file)
+      return clientes = JSON.parse(file)    
     end
+    
+    return []
   
-    []
-  end
+end
 
 #CADRATRAR clientes
-def cadastro_clientes(clientes)    
+def cadastro_clientes(clientes, file_path)    
     cliente = {}    
-
-    #clientes = carregar_dados_json
 
     print("Digite o nome do cliente: ")
     cliente["nome"] = gets
-    print("Digite o nome do veiculo: ")
+    print("Digite o nome do veículo: ")
     cliente["veiculo"] = gets
     print("Digite o valor do combustível: ")
-    cliente["valor"] = gets
-    
-    clientes.push(cliente) 
-    file_path = 'db/posto.json'
-    #clientes << cliente
+    cliente["valor"] = gets.to_i
+        
+    clientes << cliente
     json_clientes = JSON.generate(clientes)
     File.write(file_path, json_clientes)
     
 end
 
 #MOSTRA O RELATÓRIO DE clientes
-def mostra_relatorio_cliente(clientes) 
-
-    file_path = 'db/posto.json'
+def mostra_relatorio_cliente(clientes, file_path) 
 
     if File.exist?(file_path)
         file = File.read(file_path)
         clientes_lista = JSON.parse(file)
         clientes_lista.each do |cliente|
             puts("Cliente: #{cliente["nome"]}")
-            puts("Veiculo: #{cliente["veiculo"]}")
+            puts("Veículo: #{cliente["veiculo"]}")
             listros = cliente["valor"].to_i / 300
             puts("Litros: #{listros} litros")
             puts("Valor: #{cliente["valor"]}")
@@ -52,13 +47,13 @@ def mostra_relatorio_cliente(clientes)
         end
     end
 
-    []
-
 end
 
 
 #FUNÇÃO PRINCIPAL
-def main(clientes)
+def main(clientes, file_path)
+    clientes = carregar_dados_json(file_path)
+    
     while true
         system "clear" or system "cls"
         puts("Digite uma das opcões abaixo")
@@ -72,14 +67,14 @@ def main(clientes)
         case menu
         when "1" 
             system "clear" or system "cls"             
-            cadastro_clientes(clientes)
+            cadastro_clientes(clientes, file_path)
 
         when "2"            
             system "clear" or system "cls"
             if clientes.empty?
                 puts("Sem registro...")
             else
-                mostra_relatorio_cliente(clientes)
+                mostra_relatorio_cliente(clientes, file_path)
             end
             sleep(5)
 
@@ -95,4 +90,4 @@ def main(clientes)
 end
 
 #INÍCIO DO PROGRAMA
-main(clientes)
+main(clientes, file_path)

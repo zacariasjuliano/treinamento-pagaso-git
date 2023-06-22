@@ -1,5 +1,3 @@
-require 'byebug'
- 
 alunos = []
 alunos_media = []
 
