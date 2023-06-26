@@ -12,8 +12,7 @@ class DBJSON
     def listar(file_path)
         if File.exist?(file_path)
             file = File.read(file_path)
-            return File.empty?(file_path) ? [] : JSON.parse(file)
-            #return lista = JSON.parse(file)            
+            return File.empty?(file_path) ? [] : JSON.parse(file)                      
         end
         return []
     end
